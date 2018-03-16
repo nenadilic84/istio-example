@@ -1,0 +1,12 @@
+kind: EgressRule
+metadata:
+  name: jsontime
+  namespace: default
+spec:
+  destination:
+    service: time.jsontest.com
+  ports:
+    - port: 80
+      protocol: http
+    - port: 443
+      protocol: https

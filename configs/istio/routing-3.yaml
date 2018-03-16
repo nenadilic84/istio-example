@@ -1,0 +1,21 @@
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: middleware-canary-route
+  namespace: default
+spec:
+  precedence: 1
+  match:
+    request:
+      headers:
+        x-dev-user:
+          exact: super-secret
+  destination:
+    name: middleware
+  route:
+  - labels:
+      version: canary
+  httpReqRetries:
+    simpleRetry:
+      attempts: 3
+      perTryTimeout: 2s

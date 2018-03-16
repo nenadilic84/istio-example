@@ -1,0 +1,95 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: frontend-prod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend
+        version: prod
+    spec:
+      containers:
+      - name: frontend
+        image: nenadilic84/istiotest:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: SERVICE_NAME
+          value: "frontend-prod"
+        - name: UPSTREAM_URI
+          value: "http://middleware/"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: middleware-prod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: middleware
+        version: prod
+    spec:
+      containers:
+      - name: middleware
+        image: nenadilic84/istiotest:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: SERVICE_NAME
+          value: "middleware-prod"
+        - name: UPSTREAM_URI
+          value: "http://backend/"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: middleware-canary
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: middleware
+        version: canary
+    spec:
+      containers:
+      - name: middleware
+        image: nenadilic84/istiotest:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: SERVICE_NAME
+          value: "middleware-canary"
+        - name: UPSTREAM_URI
+          value: "http://backend/"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: backend-prod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend
+        version: prod
+    spec:
+      containers:
+      - name: backend
+        image: nenadilic84/istiotest:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: SERVICE_NAME
+          value: "backend-prod"
+        - name: UPSTREAM_URI
+          value: "http://time.jsontest.com/"
