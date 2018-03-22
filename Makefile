@@ -7,7 +7,7 @@ GRAFANA_POD_NAME=$(shell kubectl -n istio-system get pod -l app=grafana -o jsonp
 
 create-cluster:
 	gcloud container clusters create hello-istio --zone "$(ZONE)" --cluster-version "1.9.2-gke.1"
-	kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
+	kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(shell gcloud config get-value core/account)
 deploy-istio:
 	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$(ISTIO_VERSION) sh -
 
